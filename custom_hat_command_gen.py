@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-scoreboard_command='scoreboard players set @a[score_EquipHat=1,score_EquipHat_min=1,score_FailedToWearHat=0] SelectedHat {item_id} {{SelectedItem:{{id:minecraft:{item_name},Damage:{item_damage},tag:{{display:{{Name:"Custom Hat"}}}}}}}}'
+scoreboard_command='/scoreboard players set @a[team=Donator,score_equiphat_min=0,score_equiphat=0] equiphat {item_id} {{SelectedItem:{{id:minecraft:{item_name},Damage:{item_damage},tag:{{display:{{Name:"Custom Hat"}}}}}}}}'
 
-clear_command='clear @a[score_SelectedHat_min={item_id},score_SelectedHat={item_id},score_EquipHat=1,score_EquipHat_min=1] {item_name} {item_damage} 1 {{display:{{Name:"Custom Hat"}}}}'
+clear_command='/clear @a[score_equiphat_min={item_id},score_equiphat={item_id}] minecraft:{item_name} {item_damage} 1 {{display:{{Name:"Custom Hat"}}}}'
 
-replaceitem_command='replaceitem entity @a[score_SelectedHat={item_id},score_SelectedHat_min={item_id},score_EquipHat=1,score_EquipHat_min=1] slot.armor.head minecraft:{item_name} 1 {item_damage} {{id:minecraft:{item_name},display:{{Name:"Custom Hat"}}}}'
+replaceitem_command='/replaceitem entity @a[score_equiphat_min={item_id},score_equiphat={item_id}] slot.armor.head minecraft:{item_name} 1 {item_damage} {{display:{{Name:"Custom Hat"]}}}}'
 
 # http://stackoverflow.com/questions/10664856/make-dictionary-with-duplicate-keys-in-python
 class Dictlist(dict):
@@ -47,7 +47,7 @@ with open("commands.txt", "w") as output_file:
 		
 		def write_command(command):
 			output_file.write(command.format(item_name=item_id_name,
-item_id=names_and_ids_dict.get(item_id_name),
+item_id=int(names_and_ids_dict.get(item_id_name)) + 1,
 #item_damage=names_and_ids_dict.get(item_id_name)[1]) + "\n")
 item_damage="0") + "\n")
 		
