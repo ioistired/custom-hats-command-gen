@@ -629,10 +629,3 @@ record_wait 0
 observer 0
 magma 0
 structure_block 0
-command_block 0
-repeating_command_block 0
-chain_command_block 0
-chorus_flower 0
-chorus_plant 0
-end_rod 0
-end_gateway 0
