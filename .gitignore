@@ -1,5 +1,6 @@
 # output of command_gen
 commands.txt
+**/custom_hat.json
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
