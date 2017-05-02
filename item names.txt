@@ -608,7 +608,6 @@ spectral_arrow	0
 tipped_arrow	0
 lingering_potion	0
 shield	0
-elytra	0
 spruce_boat	0
 birch_boat	0
 jungle_boat	0
