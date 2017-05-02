@@ -66,7 +66,7 @@ def write_commands(input_filename='', output_filename='commands.txt'):
 
 
 def to_advancement(name='null_byte:custom_hat', iterable=commands_iter()):
-	"""Convert commands from iterable to the contents of an advancement.json file
+	"""Convert commands from iterable to an advancement JSON object
 	
 	name is the in-game name of the advancement
 	iterable is something that provides commands
@@ -90,8 +90,8 @@ def to_advancement(name='null_byte:custom_hat', iterable=commands_iter()):
 		}
 	}
 	
-	for command in iterable:
-		advancement['rewards']['commands'].append(command)
+	# add the commands to the commands reward
+	advancement['rewards']['commands'].extend(iterable)
 	
 	return advancement
 
@@ -105,6 +105,10 @@ def write_advancement(contents: str, name='null_byte:custom_hat'):
 		os.mkdir(output_dir)
 	except FileExistsError: # if the dir already exists, great!
 		pass
+	
+	# if there's any other errors, let them propagate
+	# (ie halt the module and tell the user)
+	
 	with open(os.path.join(output_dir, output_filename + '.json'), 'w') as f:
 		json.dump(contents, f)
 
