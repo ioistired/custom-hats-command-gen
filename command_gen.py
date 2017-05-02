@@ -23,9 +23,9 @@ def commands_iter(input_filename='item names.txt'):
 		'tellraw @s[score_hat_min=0,score_hat=0] {"text":"You already have something on your head.","color":"gray"}',
 	)
 	
-	scoreboard_command='/scoreboard players set @a[team=Donator,score_hat_min=1,score_hat=1] hat {score} {{SelectedItem:{{id:"minecraft:{item_name}",Damage:{item_damage}s}}}}'
-	clear_command='/clear @a[score_hat_min={score},score_hat={score}] minecraft:{item_name} {item_damage} 1'
-	replaceitem_command='/replaceitem entity @a[score_hat_min={score},score_hat={score}] slot.armor.head minecraft:{item_name} 1 {item_damage}'
+	scoreboard_command='scoreboard players set @a[team=Donator,score_hat_min=1,score_hat=1] hat {score} {{SelectedItem:{{id:"minecraft:{item_name}",Damage:{item_damage}s}}}}'
+	clear_command='clear @a[score_hat_min={score},score_hat={score}] minecraft:{item_name} {item_damage} 1'
+	replaceitem_command='replaceitem entity @a[score_hat_min={score},score_hat={score}] slot.armor.head minecraft:{item_name} 1 {item_damage}'
 	
 	with open(input_filename) as items_file:
 		# score_hat=1 is reserved for players who have run /trigger hat set 1
