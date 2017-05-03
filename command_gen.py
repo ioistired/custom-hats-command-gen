@@ -79,7 +79,7 @@ def to_advancement(name='null_byte:custom_hat', iterable=commands_iter()):
 	advancement = {
 		'criteria': {
 			'run': {
-				'trigger': 'minecraft:impossible'
+				'trigger': 'minecraft:on_tick'
 			}
 		},
 		'rewards': {
