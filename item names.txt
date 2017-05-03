@@ -659,3 +659,4 @@ record_wait	0
 observer	0
 magma	0
 structure_block	0
+knowledge_book 0
