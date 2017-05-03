@@ -82,7 +82,6 @@ def to_advancement(name='null_byte:custom_hat', iterable=commands_iter()):
 				'trigger': 'minecraft:impossible'
 			}
 		},
-		
 		'rewards': {
 			'commands': [
 				'advancement revoke @s only {}'.format(name)
@@ -100,6 +99,9 @@ def write_advancement(contents: str, name='null_byte:custom_hat'):
 	# in the advancements directory, files are laid out as
 	# namespace:advancement → namespace/advancement.json
 	output_dir, output_filename = name.split(':')
+	
+	# put the advancements in their own dir
+	output_dir = os.path.join('advancements', output_dir)
 	
 	try:
 		os.mkdir(output_dir)
