@@ -19,7 +19,7 @@ def commands_iter(input_filename='item names.txt'):
 	
 	yield from (
 		'scoreboard objectives add hat trigger',
-		'scoreboard players enable @s hat'
+		'scoreboard players enable @s hat',
 		'scoreboard players set @s[score_hat_min=1,score_hat=1] hat 0 {Inventory:[{Slot:103b}]}',
 		'tellraw @s[score_hat_min=0,score_hat=0] {"text":"You already have something on your head.","color":"gray"}',
 	)
@@ -41,7 +41,6 @@ def commands_iter(input_filename='item names.txt'):
 						item_damage=item[1],
 				)
 	
-	# 3 final commands are also static
 	yield from (
 		'tellraw @s[score_hat_min=1,score_hat=1] {"text":"Invalid item. You need to hold a custom hat in your hand.","color":"gray"}',
 		'scoreboard players set @s hat -1',
@@ -79,7 +78,7 @@ def to_advancement(name='null_byte:custom_hat', iterable=commands_iter()):
 	advancement = {
 		'criteria': {
 			'run': {
-				'trigger': 'minecraft:on_tick'
+				'trigger': 'minecraft:tick'
 			}
 		},
 		'rewards': {
