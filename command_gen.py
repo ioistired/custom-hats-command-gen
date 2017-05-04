@@ -64,6 +64,18 @@ def write_commands(input_filename='', output_filename='commands.txt'):
 				outfile.write(command + '\n')
 
 
+def parse_advancement_name(name):
+	"""Convert an in-game advancement name to a file path
+	
+	>>> parse_advancement_name('null_byte:custom_hat')
+	null_byte/custom_hat.json
+	>>> parse_advancement_name('null_byte:hat/command')
+	null_byte/hat/command.json
+	"""
+	
+	path = name.replace(':', '/') + '.json'
+	return path
+
 def to_advancement(name='null_byte:custom_hat', iterable=commands_iter()):
 	"""Convert commands from iterable to an advancement JSON object
 	
