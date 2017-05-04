@@ -18,8 +18,6 @@ import json
 def commands_iter(input_filename='item names.txt'):
 	
 	yield from (
-		'scoreboard objectives add hat trigger',
-		'scoreboard players enable @s hat',
 		'scoreboard players set @s[score_hat_min=1,score_hat=1] hat 0 {Inventory:[{Slot:103b}]}',
 		'tellraw @s[score_hat_min=0,score_hat=0] {"text":"You already have something on your head.","color":"gray"}',
 	)
@@ -64,7 +62,21 @@ def write_commands(input_filename='', output_filename='commands.txt'):
 			outfile.write(command + '\n')
 
 
-def to_advancement(name='null_byte:custom_hat', iterable=commands_iter()):
+def parse_advancement_name(name):
+	"""Convert an in-game advancement name to a file path
+	
+	>>> parse_advancement_name('null_byte:custom_hat')
+	null_byte/custom_hat.json
+	>>> parse_advancement_name('null_byte:hat/command')
+	null_byte/hat/command.json
+	"""
+	
+	# namespace:subdir/advancement → namespace/subdir/advancement.json
+	fullpath = name.replace(':', '/') + '.json'
+	return os.path.split(fullpath)
+
+
+def to_advancement(name, iterable=commands_iter()):
 	"""Convert commands from iterable to an advancement JSON object
 	
 	name is the in-game name of the advancement
@@ -78,7 +90,7 @@ def to_advancement(name='null_byte:custom_hat', iterable=commands_iter()):
 	advancement = {
 		'criteria': {
 			'run': {
-				'trigger': 'minecraft:tick'
+				'trigger': 'minecraft:impossible'
 			}
 		},
 		'rewards': {
@@ -88,18 +100,14 @@ def to_advancement(name='null_byte:custom_hat', iterable=commands_iter()):
 		}
 	}
 	
-	# add the commands to the commands reward
+	# add the command lines to the commands reward
 	advancement['rewards']['commands'].extend(iterable)
 	
 	return advancement
 
 	
-def write_advancement(contents: str, name='null_byte:custom_hat'):
-	# in the advancements directory, files are laid out as
-	# namespace:advancement → namespace/advancement.json
-	output_dir, output_filename = name.split(':')
-	
-	# put the advancements in their own dir
+def write_advancement(contents: str, name):
+	output_dir, output_filename = parse_advancement_name(name)
 	output_dir = os.path.join('advancements', output_dir)
 	
 	try:
@@ -110,9 +118,10 @@ def write_advancement(contents: str, name='null_byte:custom_hat'):
 	# if there's any other errors, let them propagate
 	# (ie halt the module and tell the user)
 	
-	with open(os.path.join(output_dir, output_filename + '.json'), 'w') as f:
+	with open(os.path.join(output_dir, output_filename), 'w') as f:
 		json.dump(contents, f)
 
 
 if __name__ == '__main__':
-	write_advancement(to_advancement())
+	name = 'null_byte:hat/equip'
+	write_advancement(to_advancement(name), name)
