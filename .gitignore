@@ -1,5 +1,5 @@
 # output of command_gen
-advancements/
+advancements/*/hat/equip.json
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

@@ -18,8 +18,6 @@ import json
 def commands_iter(input_filename='item names.txt'):
 	
 	yield from (
-		'scoreboard objectives add hat trigger',
-		'scoreboard players enable @s hat',
 		'scoreboard players set @s[score_hat_min=1,score_hat=1] hat 0 {Inventory:[{Slot:103b}]}',
 		'tellraw @s[score_hat_min=0,score_hat=0] {"text":"You already have something on your head.","color":"gray"}',
 	)
@@ -92,7 +90,7 @@ def to_advancement(name, iterable=commands_iter()):
 	advancement = {
 		'criteria': {
 			'run': {
-				'trigger': 'minecraft:tick'
+				'trigger': 'minecraft:impossible'
 			}
 		},
 		'rewards': {
