@@ -54,14 +54,14 @@ def write_commands(input_filename='', output_filename='commands.txt'):
 	"""
 	
 	with open(output_filename, 'w') as outfile:
-		# if input filename is not specified, use default
-		if not len(input_filename):
-			for command in commands_iter():
-				outfile.write(command + '\n')
+		if input_filename:
+			commands = commands_iter(input_filename)
+		# if output_filename isn't specified, use default
 		else:
-			# TODO deduplicate
-			for command in commands_iter(input_filename):
-				outfile.write(command + '\n')
+			commands = commands_iter()
+		
+		for command in commands_iter(input_filename):
+			outfile.write(command + '\n')
 
 
 def to_advancement(name='null_byte:custom_hat', iterable=commands_iter()):
