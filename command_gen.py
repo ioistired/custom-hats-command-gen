@@ -36,9 +36,9 @@ def commands_iter(items):
 		'tellraw @s[score_hat_min=0,score_hat=0] {"text":"You already have something on your head.","color":"gray"}',
 	)
 	
-	scoreboard_command='scoreboard players set @a[team=Donator,score_hat_min=1,score_hat=1] hat {score} {{SelectedItem:{{id:"minecraft:{name}",Damage:{damage}s}}}}'
-	clear_command='clear @a[score_hat_min={score},score_hat={score}] minecraft:{name} {damage} 1'
-	replaceitem_command='replaceitem entity @a[score_hat_min={score},score_hat={score}] slot.armor.head minecraft:{name} 1 {damage}'
+	scoreboard_command='scoreboard players set @s[team=Donator,score_hat_min=1,score_hat=1] hat {score} {{SelectedItem:{{id:"minecraft:{name}",Damage:{damage}s}}}}'
+	clear_command='clear @s[score_hat_min={score},score_hat={score}] minecraft:{name} {damage} 1'
+	replaceitem_command='replaceitem entity @s[score_hat_min={score},score_hat={score}] slot.armor.head minecraft:{name} 1 {damage}'
 	
 	for item in get_items('item names.txt'):
 		for command in (scoreboard_command, clear_command, replaceitem_command):

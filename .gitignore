@@ -1,5 +1,5 @@
 # output of command_gen
-functions/null_byte
+functions/null_byte/hat/equip.mcfunction
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
