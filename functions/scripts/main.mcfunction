@@ -1,1 +1,1 @@
-function null_byte:hat/command
+function null_byte:hat/main
