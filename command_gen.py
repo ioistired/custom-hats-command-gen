@@ -16,36 +16,85 @@ import json
 
 
 class Item:
-	def __init__(self, score, name, damage=0):
-		self.score, self.name, self.damage = score, name, damage
+	def __init__(self, name, damage_value=0):
+		self.name = name
+		self.damage_value = damage_value
+	
+	def __eq__(self, other):
+		return self.name, self.damage_value == other.name, other.damage_value
 
 
-def get_items(items_filename='item names.txt'):
-	with open(items_filename) as items_file:
-		# score_hat=1 is reserved for players who have run /trigger hat set 1
-		for score, item in enumerate(items_file, 2):
-			# split tabs and remove final newlines
-			item = item.rstrip().split()
-			yield Item(score, name=item[0], damage=item[1])
+class RestrictedItem(Item):
+	def __init__(self, restricted_team_name, *args, **kwargs):
+		super(RestrictedItem, self).__init__(*args, **kwargs)
+		self.restricted_team_name = restricted_team_name
 
 
-def commands_iter(items):
+def get_team_selector(item):
+	try:
+		return ',team={}'.format(item.restricted_team_name)
+	except AttributeError:
+		return ''
+
+
+class ItemConfig(list):
+	def __init__(self, filename):
+		with open(filename) as config_file:
+			
+			self._get_restricted_team_name(config_file)
+			
+			for line in config_file:
+				line = line.rstrip()
+				prefix = line[0]
+				
+				if prefix == '#':
+					continue # ignore comments
+				else:
+					if len(line.split('\t')) == 1:
+						print(line)
+					name, damage = line.split()
+					self.append(self._make_item(name, damage))
+	
+	
+	def _make_item(self, name, damage):
+		if name[0] == '!':
+			return RestrictedItem(
+				self.restricted_team_name,
+				name[1:],
+				damage
+			)
+		else:
+			return Item(name, damage)
+	
+	
+	def _get_restricted_team_name(self, config_file):
+		first_line = next(config_file).rstrip()
+			
+		if len(first_line.split()) == 1: # no \t == not an item
+			self.restricted_team_name = first_line
+
+
+def commands_iter(items_filename='item names.txt'):
 	
 	yield from (
 		'scoreboard players set @s[score_hat_min=1,score_hat=1] hat 0 {Inventory:[{Slot:103b}]}',
 		'tellraw @s[score_hat_min=0,score_hat=0] {"text":"You already have something on your head.","color":"gray"}',
 	)
 	
-	scoreboard_command='scoreboard players set @s[team=Donator,score_hat_min=1,score_hat=1] hat {score} {{SelectedItem:{{id:"minecraft:{name}",Damage:{damage}s}}}}'
+	scoreboard_command='scoreboard players set @s[score_hat_min=1,score_hat=1{team}] hat {score} {{SelectedItem:{{id:"minecraft:{name}",Damage:{damage}s}}}}'
 	clear_command='clear @s[score_hat_min={score},score_hat={score}] minecraft:{name} {damage} 1'
 	replaceitem_command='replaceitem entity @s[score_hat_min={score},score_hat={score}] slot.armor.head minecraft:{name} 1 {damage}'
 	
-	for item in get_items('item names.txt'):
+	# we start with a score of 2
+	# because -1, 0, and 1 are reserved
+	for score, item in enumerate(ItemConfig(items_filename), 2):
 		for command in (scoreboard_command, clear_command, replaceitem_command):
+			
 			yield command.format(
-				score=item.score,
+				score=score,
 				name=item.name,
-				damage=item.damage,
+				damage=item.damage_value,
+				team=get_team_selector(item),
 			)
 	
 	yield from (
@@ -83,7 +132,7 @@ def write_function(commands, name):
 	# (ie halt the module and tell the user)
 	
 	with open(os.path.join(output_dir, output_filename), 'w') as f:
-		for command in commands_iter(get_items()):
+		for command in commands_iter():
 			f.write(command + '\n')
 
 
