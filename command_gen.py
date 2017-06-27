@@ -98,7 +98,7 @@ def commands_iter(items_filename='item names.txt'):
 			)
 	
 	yield from (
-		'tellraw @s[score_hat_min=1,score_hat=1] {"text":"Invalid item. You need to hold a custom hat in your hand.","color":"gray"}',
+		'tellraw @s[score_hat_min=1,score_hat=1] {"text":"Either the item you\'re holding is invalid, or you don\'t have permission to equip it.","color":"gray"}',
 		'scoreboard players set @s hat -1',
 	)
 
